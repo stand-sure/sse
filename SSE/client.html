@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SSE</title>
+</head>
+
+<body>
+<script type="text/javascript">
+    if (!!window.EventSource) {
+        const source = new EventSource('//localhost:5101/');
+        
+        source.onmessage = (event) => {
+            console.log(`message: ${event.data}`);
+        };
+        
+        source.onopen = () => console.log("opened");
+        
+        source.onerror = (event) => {
+            if (event.eventPhase === EventSource.CLOSED){
+                source.close();
+                console.log("Closed")
+            }
+
+            if (event.target.readyState === EventSource.CLOSED) {
+                console.log("Disconnected");
+            }
+            else if (event.target.readyState === EventSource.CONNECTING) {
+                console.log("Connecting...");
+            }
+        };
+    }
+</script>
+</body>
+</html>
